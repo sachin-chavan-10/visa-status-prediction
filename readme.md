@@ -1,6 +1,6 @@
 **AI Enabled Visa Status & Processing Time Estimator** 
 
-**Milestone 1: Data collection and preprocessing**
+**Milestone 1: Data collection and preprocessing.**
 
 **Objective**
 To prepare a clean and structured dataset for predicting visa case status and processing time using machine learning.
