@@ -5,62 +5,49 @@
 ## Objective
 - To prepare a clean and structured dataset for predicting visa case status and processing time using machine learning.
 
-# Data Loading
+## Data Loading
 
 Loaded raw visa data from datasets/raw_data.csv
 
 Performed initial inspection (head, info, null checks)
 
-# Data Cleaning & Preparation
+## Data Cleaning & Preparation
 
-Handled missing values:
+- Handled missing values:
+- Categorical → filled with "Unknown"
+- Numerical → filled with median values
+- Fixed data types for numerical and date columns
+- Standardized categorical labels
 
-Categorical → filled with "Unknown"
+## Date Handling
 
-Numerical → filled with median values
+- Generated synthetic application_date (2016–2024)
+- Created decision_date using processing time
+- Extracted application_year and application_month
+- Dropped raw date fields after extraction
 
-Fixed data types for numerical and date columns
+## Processing Time Generation
 
-Standardized categorical labels
+- Generated realistic processing_time_days using rule-based logic
+- Factors considered: job type, wage, company size, case status
 
-# Date Handling
+## Feature Engineering
 
-Generated synthetic application_date (2016–2024)
+- Created company_age from year of establishment
 
-Created decision_date using processing time
+- Normalized wages to annual format
 
-Extracted application_year and application_month
+- Removed unused or redundant columns
 
-Dropped raw date fields after extraction
+## Target Preparation
 
-# Processing Time Generation
+- Standardized visa outcomes:
+- Certified → Approved
+### Identified targets:
+- Classification: case_status
+- Regression: processing_time_days
 
-Generated realistic processing_time_days using rule-based logic
+## Final Dataset
 
-Factors considered: job type, wage, company size, case status
-
-# Feature Engineering
-
-Created company_age from year of establishment
-
-Normalized wages to annual format
-
-Removed unused or redundant columns
-
-# Target Preparation
-
-Standardized visa outcomes:
-
-Certified → Approved
-
-Identified targets:
-
-Classification: case_status
-
-Regression: processing_time_days
-
-# Final Dataset
-
-Selected final feature set
-
-Exported cleaned dataset as:Final_Cleaned.csv
+- Selected final feature set
+- Exported cleaned dataset as:Final_Cleaned.csv
