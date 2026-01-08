@@ -16,6 +16,10 @@
 - Fixed data types for numerical and date columns
 - Standardized categorical labels
 
+## Encoded categorical and binary data
+- Lable encoding for binary categorical values(has_job_experience, requires_job_training,full_time_positon)
+- One hot encoding for categorical feaures (continent, region of employment, and education level)
+
 ## Date Handling
 - Generated synthetic application_date (2016–2024)
 - Created decision_date using processing time
