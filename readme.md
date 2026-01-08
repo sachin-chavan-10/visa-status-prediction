@@ -33,8 +33,9 @@
 
 ## Target Preparation
 - Standardized visa outcomes:
-- Certified → Approved
-**Identified targets:**
+- Certified → Approved 
+
+#### Identified targets:
 - Classification: case_status
 - Regression: processing_time_days
 
