@@ -58,9 +58,9 @@
 
 - Analyzed relationships between input features and target variables:
 
-### case_status
+- 1. case_status
 
-### processing_time_days
+- 2. processing_time_days
 
 - Generated correlation heatmaps, including filtered correlations (|corr| > 0.1).
 
