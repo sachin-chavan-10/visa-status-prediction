@@ -46,3 +46,40 @@
 ## Final Dataset
 - Selected final feature set
 - Exported cleaned dataset as:Final_Cleaned.csv
+
+# Milestone 2: Exploratory Data Analysis (EDA) & Feature Engineering
+## Objective
+
+- To analyze the cleaned dataset, extract insights, and prepare meaningful features for machine learning models.
+
+## Steps Completed
+
+- Performed Exploratory Data Analysis (EDA) using visualizations and correlation analysis.
+
+- Analyzed relationships between input features and target variables:
+
+### case_status
+
+### processing_time_days
+
+- Generated correlation heatmaps, including filtered correlations (|corr| > 0.1).
+
+- Identified weak linear correlations and justified feature engineering for non-linear models.
+
+## Feature Engineering
+
+- Created wage bands (low, medium, high, very high).
+
+- Categorized company size (small, medium, large, enterprise).
+
+- Generated seasonal features and peak-season indicator.
+
+- Added region-level processing indicator.
+
+- Ensured all engineered features are binary (0/1).
+
+## Outcome
+
+- Final dataset contains fully numeric, model-ready features.
+
+- Dataset is prepared for classification and regression modeling in the next milestone.
