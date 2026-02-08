@@ -83,3 +83,20 @@
 - Final dataset contains fully numeric, model-ready features.
 
 - Dataset is prepared for classification and regression modeling in the next milestone.
+
+# Milestone 3: Predictive Modeling & Model Selection 
+- This milestone involves the development, tuning, and selection of machine learning models to predict US Visa outcomes. The project is split into two primary objectives:
+- Classification: Predicting if a visa will be Approved or Denied.
+- Regression: Predicting the exact Processing Time (Days).
+## Technical Implementation
+### 1. Case Status Prediction (Classification)
+We evaluated multiple classifiers to handle the imbalanced nature of visa approvals.
+- Models Tested: Decision Tree, Random Forest, AdaBoost, and Gradient Boosting.
+- Optimization: Utilized RandomizedSearchCV with a focus on F1-Score to balance Precision and Recall.  
+- Winner: Tuned Gradient Boosting (Selected for its superior generalization and low variance between training and test sets).
+
+### 2. Processing Time Prediction (Regression)
+Predicted the duration of the visa application process based on engineered features.
+- Models Tested: Linear Regression, Random Forest Regressor, and HistGradientBoostingRegressor (HGBR).
+- Optimization: Optimized $R^2$ using Permutation Importance to identify key drivers like visa_type and application_year.
+- Winner: Tuned HGBR (Achieved a final $R^2$ Score of 0.97).
