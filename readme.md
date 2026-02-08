@@ -99,4 +99,4 @@ We evaluated multiple classifiers to handle the imbalanced nature of visa approv
 Predicted the duration of the visa application process based on engineered features.
 - Models Tested: Linear Regression, Random Forest Regressor, and HistGradientBoostingRegressor (HGBR).
 - Optimization: Optimized $R^2$ using Permutation Importance to identify key drivers like visa_type and application_year.
-- Winner: Tuned HGBR (Achieved a final $R^2$ Score of 0.97).
+- Winner: HGBR (Achieved a final $R^2$ Score of 0.97).
