@@ -18,7 +18,7 @@ if not os.path.exists(MODELS_PATH):
 # --- Load Models (Global Scope) ---
 try:
     status_model = joblib.load(os.path.join(MODELS_PATH, 'status_case_model_gb.pkl'))
-    time_model = joblib.load(os.path.join(MODELS_PATH, 'processing_time_model.pkl'))
+    time_model = joblib.load(os.path.join(MODELS_PATH, 'pt_model.pkl'))
     print("--- Models Loaded Successfully! ---")
 except FileNotFoundError as e:
     print(f"CRITICAL ERROR: Model file missing. {e}")
@@ -38,15 +38,8 @@ STATUS_FEATURES = [
 ]
 
 TIME_FEATURES = [
-    'has_previous_rejection', 'application_year', 'visa_O-1', 'application_month',
-    'annual_wage', 'visa_H-1B', 'no_of_employees', 'visa_L-1', 'visa_TN', 
-    'yr_of_estab', 'education_of_employee_Doctorate', 'visa_E-2', 
-    'region_of_employment_South', 'has_job_experience', 'continent_Oceania',
-    'education_of_employee_High School', 'continent_Asia', 'requires_job_training',
-    'continent_South America', 'continent_North America', 'region_of_employment_Midwest',
-    'region_of_employment_West', 'continent_Europe', 'education_of_employee_Master',
-    'region_of_employment_Northeast', 'full_time_position', 'company_age'
-]
+    'has_previous_rejection', 'visa_O-1', 'application_month',
+    'annual_wage', 'visa_H-1B', 'no_of_employees', 'visa_L-1', 'visa_TN']
 
 @app.route('/')
 def home():

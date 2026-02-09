@@ -15,14 +15,10 @@
 
         <form action="/predict" method="POST">
             <div class="section">
-                <h3><i class="icon"></i> Application Details</h3>
+                <h3>Application Details</h3>
                 <div class="input-grid">
                     <div class="input-group">
-                        <label>Application Year</label>
-                        <input type="number" name="application_year" value="2026" required>
-                    </div>
-                    <div class="input-group">
-                        <label>App Month (1-12)</label>
+                        <label>Application Month (1-12)</label>
                         <input type="number" name="application_month" min="1" max="12" required>
                     </div>
                     <div class="input-group">
@@ -41,12 +37,11 @@
             </div>
 
             <div class="section">
-                <h3><i class="icon"></i> Profile Categories</h3>
-                
+                <h3>Profile Categories</h3>
                 <div class="select-group">
                     <label>Education Level</label>
                     <select onchange="updateValue('edu', this.value)">
-                        <option value="baseline">Bachelor (Baseline)</option> 
+                        <option value="baseline">Bachelor</option> 
                         <option value="education_of_employee_High School">High School</option>
                         <option value="education_of_employee_Master">Master's</option>
                         <option value="education_of_employee_Doctorate">Doctorate</option>
@@ -54,7 +49,7 @@
 
                     <label>Continent of Origin</label>
                     <select onchange="updateValue('cont', this.value)">
-                        <option value="baseline">Africa (Baseline)</option>
+                        <option value="baseline">Africa</option>
                         <option value="continent_Asia">Asia</option>
                         <option value="continent_Europe">Europe</option>
                         <option value="continent_North America">North America</option>
@@ -64,7 +59,7 @@
 
                     <label>Region of Employment</label>
                     <select onchange="updateValue('reg', this.value)">
-                        <option value="baseline">Island (Baseline)</option>
+                        <option value="baseline">Island</option>
                         <option value="region_of_employment_South">South</option>
                         <option value="region_of_employment_West">West</option>
                         <option value="region_of_employment_Midwest">Midwest</option>
@@ -73,34 +68,29 @@
 
                     <label>Visa Category</label>
                     <select onchange="updateValue('visa', this.value)">
-                        <option value="baseline">Select Visa Type</option>
+                        <option value="baseline">E-2</option>
                         <option value="visa_H-1B">H-1B</option>
                         <option value="visa_L-1">L-1</option>
                         <option value="visa_O-1">O-1</option>
                         <option value="visa_TN">TN</option>
-                        <option value="visa_E-2">E-2</option>
                     </select>
                 </div>
             </div>
 
             <div class="section">
-                <h3><i class="icon"></i> Additional Flags</h3>
+                <h3>Additional Flags</h3>
                 <div class="checkbox-grid">
                     <label class="check-container">Has Experience
                         <input type="checkbox" name="has_job_experience" value="1">
-                        <span class="checkmark"></span>
                     </label>
                     <label class="check-container">Needs Training
                         <input type="checkbox" name="requires_job_training" value="1">
-                        <span class="checkmark"></span>
                     </label>
                     <label class="check-container">Full Time
                         <input type="checkbox" name="full_time_position" value="1">
-                        <span class="checkmark"></span>
                     </label>
                     <label class="check-container">Prev Rejection
                         <input type="checkbox" name="has_previous_rejection" value="1">
-                        <span class="checkmark"></span>
                     </label>
                 </div>
             </div>
@@ -109,20 +99,22 @@
                 <input type="hidden" name="education_of_employee_High School" class="edu" value="0">
                 <input type="hidden" name="education_of_employee_Master" class="edu" value="0">
                 <input type="hidden" name="education_of_employee_Doctorate" class="edu" value="0">
+                
                 <input type="hidden" name="continent_Asia" class="cont" value="0">
                 <input type="hidden" name="continent_Europe" class="cont" value="0">
                 <input type="hidden" name="continent_North America" class="cont" value="0">
                 <input type="hidden" name="continent_Oceania" class="cont" value="0">
                 <input type="hidden" name="continent_South America" class="cont" value="0">
+                
                 <input type="hidden" name="region_of_employment_South" class="reg" value="0">
                 <input type="hidden" name="region_of_employment_West" class="reg" value="0">
                 <input type="hidden" name="region_of_employment_Midwest" class="reg" value="0">
                 <input type="hidden" name="region_of_employment_Northeast" class="reg" value="0">
+                
                 <input type="hidden" name="visa_H-1B" class="visa" value="0">
                 <input type="hidden" name="visa_L-1" class="visa" value="0">
                 <input type="hidden" name="visa_O-1" class="visa" value="0">
                 <input type="hidden" name="visa_TN" class="visa" value="0">
-                <input type="hidden" name="visa_E-2" class="visa" value="0">
             </div>
 
             <button type="submit" class="predict-btn">Get AI Prediction</button>
@@ -131,13 +123,13 @@
 
     <script>
         function updateValue(groupClass, selectedName) {
-            // Set all inputs in this group to 0
+            // Reset all inputs in this specific group to 0
             document.querySelectorAll('.' + groupClass).forEach(input => {
                 input.value = "0";
             });
-            // If it's not the baseline, set the specific hidden input to 1
+            // If the user didn't pick the baseline/dropped column, set the selected one to 1
             if (selectedName !== "baseline") {
-                const target = document.querySelector(`input[name="${selectedName}"]`);
+                const target = document.getElementsByName(selectedName)[0];
                 if (target) target.value = "1";
             }
         }

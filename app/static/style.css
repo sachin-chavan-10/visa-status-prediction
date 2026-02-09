@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --primary: #4361ee;
     --primary-hover: #3a56d4;
     --bg: #f8f9fd;
@@ -47,7 +47,7 @@ h3 {
     align-items: center;
 }
 
-/* Form Elements */
+
 .input-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -82,7 +82,7 @@ input:focus, select:focus {
     border-color: var(--primary);
 }
 
-/* Checkboxes */
+
 .checkbox-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -104,7 +104,7 @@ input:focus, select:focus {
     cursor: pointer;
 }
 
-/* Button */
+
 .predict-btn {
     width: 100%;
     background: var(--primary);
@@ -126,7 +126,7 @@ input:focus, select:focus {
     transform: scale(0.98);
 }
 
-/* Responsive */
+
 @media (max-width: 480px) {
     .input-grid, .checkbox-grid {
         grid-template-columns: 1fr;
@@ -139,3 +139,224 @@ input:focus, select:focus {
 .progress-bar { background: #eee; border-radius: 10px; height: 10px; }
 .fill { background: #3498db; height: 100%; border-radius: 10px; }
 .card { background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 10px 0; }
+
+.select-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.select-group label {
+    font-weight: bold;
+    color: #34495e;
+}
+
+select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background-color: white;
+} */
+
+
+:root {
+    --primary: #4361ee;
+    --primary-hover: #3a56d4;
+    --bg: #f8f9fd;
+    --text: #2b2d42;
+    --border: #e0e4f0;
+    --white: #ffffff;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --muted: #8d99ae;
+}
+
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.container {
+    background: var(--white);
+    width: 100%;
+    max-width: 600px;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 { margin: 0; font-size: 1.8rem; color: var(--primary); }
+header p { color: var(--muted); margin-top: 5px; }
+
+.section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+h3 {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: var(--text);
+}
+
+/* Form Elements */
+.input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 10px; /* Added row gap for better vertical spacing */
+}
+
+.input-group label, .select-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    color: #4a4e69;
+}
+
+/* Removed the specific padding-right to maintain grid symmetry */
+.input-group {
+    width: 100%; 
+}
+
+input[type="number"], select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+    background: #fff;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* Checkboxes */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.check-container {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 5px; /* Added breathing room vertically */
+}
+
+.check-container input {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Button */
+.predict-btn {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    padding: 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.2s;
+    margin-top: 10px;
+}
+
+.predict-btn:hover {
+    background: var(--primary-hover);
+}
+
+.predict-btn:active {
+    transform: scale(0.98);
+}
+
+/* Result Card Styles */
+.card { 
+    background: #f9f9f9; 
+    padding: 20px; 
+    border-radius: 12px; 
+    margin: 15px 0; 
+    border: 1px solid var(--border);
+}
+
+.label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.certified { color: var(--success); }
+.denied { color: var(--danger); }
+
+/* Confidence Meter */
+.confidence-meter p {
+    font-size: 0.9rem;
+    margin: 10px 0 5px 0;
+    color: #4a4e69;
+}
+
+.progress-bar { 
+    background: #e0e4f0; 
+    border-radius: 10px; 
+    height: 10px; 
+    overflow: hidden;
+}
+
+.fill { 
+    background: linear-gradient(90deg, var(--primary), #4cc9f0); 
+    height: 100%; 
+    border-radius: 10px; 
+    transition: width 1s ease-in-out;
+}
+
+.small-text { font-size: 0.95rem; margin-top: 8px; }
+.sub-info { 
+    font-size: 0.75rem; 
+    color: var(--muted); 
+    font-style: italic; 
+    margin-top: 4px;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Responsive Styles */
+@media (max-width: 480px) {
+    .input-grid, .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+    .container { padding: 25px; }
+    h1 { font-size: 1.5rem; }
+}
