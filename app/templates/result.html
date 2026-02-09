@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Prediction Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container result-box">
+        <h2>Estimation Results</h2>
+        
+        <div class="card">
+            <p class="label">Estimated Case Status:</p>
+            <h1 class="{{ status.lower() }}">{{ status }}</h1>
+            
+            <div class="confidence-meter">
+                <p>Model Confidence: <strong>{{ confidence }}%</strong></p>
+                <div class="progress-bar">
+                    <div class="fill" style="width: {{ confidence }}%;"></div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="card">
+            <p class="label">Predicted Processing Time:</p>
+            <h1>{{ time }}</h1>
+            <p class="small-text">Expected Range: <strong>{{ range_text }}</strong></p>
+            <p class="small-text sub-info">(Based on Model MAE: ±3.5 days)</p>
+        </div>
+    
+        <a href="/" class="btn-back">← Back to Estimator</a>
+    </div>
+</body>
+</html>
