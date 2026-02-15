@@ -40,8 +40,8 @@
 - Certified → Approved 
 
 ### Identified targets:
-- __Classification:__ case_status
-- __Regression:__ processing_time_days
+__Classification:__ case_status
+__Regression:__ processing_time_days
 
 ## Final Dataset
 - Selected final feature set
@@ -54,7 +54,9 @@
 ## Steps Completed
 - Performed Exploratory Data Analysis (EDA) using visualizations and correlation analysis.
 - Analyzed relationships between input features and target variables:
+
 __1. case_status__
+
 __2. processing_time_days__
 - Generated correlation heatmaps, including filtered correlations (|corr| > 0.1).
 - Identified weak linear correlations and justified feature engineering for non-linear models.
