@@ -541,6 +541,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
+
+app.config['SESSION_PERMANENT'] = False
 # app.config['SECRET_KEY'] = '87afef454f594ce371244deb853a9e6c4423d1edffa8111c' 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a-very-secret-dev-key')
 
@@ -657,7 +659,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         
         if user and user.check_password(password):
-            login_user(user)
+            login_user(user, remember=False)
             return redirect(url_for('assessment'))
         flash('Invalid email or password')
     return render_template('login.html')
