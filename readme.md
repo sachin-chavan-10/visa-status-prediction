@@ -121,9 +121,12 @@ __1. Clone & Install:__
 __2. Environment Variables:__ 
 Create a .env file or set the following:
 
-```SECRET_KEY: Your app secret```
-```GEMINI_API_KEY: Your Google AI key```
-```DATABASE_URL: (Optional) PostgreSQL link```
+```SECRET_KEY: Your app secret```+ + +
+
+```GEMINI_API_KEY: Your Google AI key```+ + +
+
+```DATABASE_URL: (Optional) PostgreSQL link```+ + +
+
 
 __3. Run__
 ```python app.py```
