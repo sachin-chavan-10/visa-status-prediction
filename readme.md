@@ -40,8 +40,8 @@
 - Certified → Approved 
 
 ### Identified targets:
-- Classification: case_status
-- Regression: processing_time_days
+- __Classification:__ case_status
+- __Regression:__ processing_time_days
 
 ## Final Dataset
 - Selected final feature set
@@ -74,32 +74,30 @@
 - This milestone involves the development, tuning, and selection of machine learning models to predict US Visa outcomes. 
 
 ## The project is split into two primary objectives:
-- Classification: Predicting if a visa will be Approved or Denied.
+- __Classification:__ Predicting if a visa will be Approved or Denied.
 
-- Regression: Predicting the exact Processing Time (Days).
+- __Regression:__ Predicting the exact Processing Time (Days).
 
 ## Technical Implementation
 ### 1. Case Status Prediction (Classification)
 We evaluated multiple classifiers to handle the imbalanced nature of visa approvals.
 
-- Models Tested: Decision Tree, Random Forest, AdaBoost, and Gradient Boosting.
-- Optimization: Utilized RandomizedSearchCV with a focus on F1-Score to balance Precision and Recall. 
-- Winner: Tuned Gradient Boosting (Selected for its superior generalization and low variance between training and test sets).
+- __Models Tested:__ Decision Tree, Random Forest, AdaBoost, and Gradient Boosting.
+- __Optimization:__ Utilized RandomizedSearchCV with a focus on F1-Score to balance Precision and Recall. 
+- __Winner:__ Tuned Gradient Boosting (Selected for its superior generalization and low variance between training and test sets).
 
 ### 2. Processing Time Prediction (Regression)
 Predicted the duration of the visa application process based on engineered features.
 
-- Models Tested: Linear Regression, Random Forest Regressor, and HistGradientBoostingRegressor (HGBR).
-- Optimization: Optimized $R^2$ using Permutation Importance to identify key drivers like visa_type and application_year.
-- Winner: HGBR (Achieved a final $R^2$ Score of 0.97).
+- __Models Tested:__ Linear Regression, Random Forest Regressor, and HistGradientBoostingRegressor (HGBR).
+- __Optimization:__ Optimized $R^2$ using Permutation Importance to identify key drivers like visa_type and application_year.
+- __Winner:__ HGBR (Achieved a final $R^2$ Score of 0.97).
 
 # Milestone 4: Web Application Development & Deployment
 - Developed and Deployed a full-stack Flask application that uses the models which were trained in previous milestones
 
-+ Deployment URL
-* Deployment URL
- 
-https://visa-predictor-lr2y.onrender.com
+__Deployment URL__
+ https://visa-predictor-lr2y.onrender.com
 
 ## Key Features 
 - __ML Predictions:__ Real-time classification (Certified/Denied) and regression (Processing Days).
@@ -117,13 +115,15 @@ https://visa-predictor-lr2y.onrender.com
 
 ## Local Setup
 __1. Clone & Install:__
-'''pip install -r requirements.txt'''
+
+```pip install -r requirements.txt```
 
 __2. Environment Variables:__ 
 Create a .env file or set the following:
-'''SECRET_KEY: Your app secret'''
-'''GEMINI_API_KEY: Your Google AI key'''
-'''DATABASE_URL: (Optional) PostgreSQL link'''
+
+```SECRET_KEY: Your app secret```
+```GEMINI_API_KEY: Your Google AI key```
+```DATABASE_URL: (Optional) PostgreSQL link```
 
 __3. Run__
-- '''python app.py'''
+```python app.py```
