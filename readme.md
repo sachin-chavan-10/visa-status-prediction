@@ -39,7 +39,7 @@
 - Standardized visa outcomes:
 - Certified → Approved 
 
-#### Identified targets:
+### Identified targets:
 - Classification: case_status
 - Regression: processing_time_days
 
@@ -95,6 +95,9 @@ Predicted the duration of the visa application process based on engineered featu
 
 # Milestone 4: Web Application Development & Deployment
 - Developed and Deployed a full-stack Flask application that uses the models which were trained in previous milestones
+
+## Deployment URL
+https://visa-predictor-lr2y.onrender.com
 
 ## Key Features 
 - ML Predictions: Real-time classification (Certified/Denied) and regression (Processing Days).
