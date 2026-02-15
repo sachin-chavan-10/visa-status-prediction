@@ -54,8 +54,8 @@
 ## Steps Completed
 - Performed Exploratory Data Analysis (EDA) using visualizations and correlation analysis.
 - Analyzed relationships between input features and target variables:
-- 1. case_status
-- 2. processing_time_days
+__1. case_status__
+__2. processing_time_days__
 - Generated correlation heatmaps, including filtered correlations (|corr| > 0.1).
 - Identified weak linear correlations and justified feature engineering for non-linear models.
 
