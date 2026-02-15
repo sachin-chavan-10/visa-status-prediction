@@ -1,0 +1,317 @@
+<!-- 
+
+
+<main class="max-w-4xl mx-auto py-12 px-4 mt-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">Visa Approval Predictor</h1>
+        <p class="text-slate-500 text-lg">Enter your details below to generate a real-time AI processing and status analysis.</p>
+    </div>
+
+    <form action="/predict" method="POST" class="bg-white/80 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-white/50 space-y-12">
+        
+        <section>
+            <div class="flex items-center gap-3 mb-8 text-blue-600 font-bold text-lg">
+                <span class="bg-blue-100 p-2 rounded-xl">📋</span> Application Details
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Application Month (1-12)</label>
+                    <input type="number" name="application_month" min="1" max="12" required placeholder="e.g. 5" 
+                           class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Annual Wage ($)</label>
+                    <input type="number" name="annual_wage" step="0.01" required placeholder="e.g. 85000" 
+                           class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Number of Employees</label>
+                    <input type="number" name="no_of_employees" required placeholder="e.g. 250" 
+                           class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Company Age (Years)</label>
+                    <input type="number" name="company_age" required placeholder="e.g. 15" 
+                           class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all">
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-slate-100">
+
+        <section>
+            <div class="flex items-center gap-3 mb-8 text-blue-600 font-bold text-lg">
+                <span class="bg-blue-100 p-2 rounded-xl">👤</span> Professional Profile
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Education Level</label>
+                    <select onchange="updateValue('edu', this.value)" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none appearance-none">
+                        <option value="baseline">Bachelor (Baseline)</option>
+                        <option value="education_of_employee_High School">High School</option>
+                        <option value="education_of_employee_Master">Master's</option>
+                        <option value="education_of_employee_Doctorate">Doctorate</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Continent of Origin</label>
+                    <select onchange="updateValue('cont', this.value)" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="baseline">Africa (Baseline)</option>
+                        <option value="continent_Asia">Asia</option>
+                        <option value="continent_Europe">Europe</option>
+                        <option value="continent_North America">North America</option>
+                        <option value="continent_Oceania">Oceania</option>
+                        <option value="continent_South America">South America</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Region of Employment</label>
+                    <select onchange="updateValue('reg', this.value)" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="baseline">Island (Baseline)</option>
+                        <option value="region_of_employment_Midwest">Midwest</option>
+                        <option value="region_of_employment_Northeast">Northeast</option>
+                        <option value="region_of_employment_South">South</option>
+                        <option value="region_of_employment_West">West</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Visa Category</label>
+                    <select onchange="updateValue('visa', this.value)" name="visa_category" required class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="baseline">E-2 (Baseline)</option>
+                        <option value="visa_H-1B">H-1B</option>
+                        <option value="visa_L-1">L-1</option>
+                        <option value="visa_O-1">O-1</option>
+                        <option value="visa_TN">TN</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-slate-100">
+
+        <section>
+            <div class="flex items-center gap-3 mb-8 text-blue-600 font-bold text-lg">
+                <span class="bg-blue-100 p-2 rounded-xl">🚩</span> Additional Flags
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <label class="flex flex-col items-center p-4 bg-slate-50 border border-slate-100 rounded-3xl cursor-pointer hover:bg-blue-50 transition border-2 hover:border-blue-200">
+                    <input type="checkbox" name="has_job_experience" value="1" class="w-5 h-5 mb-2 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                    <span class="text-[10px] font-black text-slate-500 uppercase text-center">Has Experience</span>
+                </label>
+                <label class="flex flex-col items-center p-4 bg-slate-50 border border-slate-100 rounded-3xl cursor-pointer hover:bg-blue-50 transition border-2 hover:border-blue-200">
+                    <input type="checkbox" name="requires_job_training" value="1" class="w-5 h-5 mb-2 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                    <span class="text-[10px] font-black text-slate-500 uppercase text-center">Needs Training</span>
+                </label>
+                <label class="flex flex-col items-center p-4 bg-slate-50 border border-slate-100 rounded-3xl cursor-pointer hover:bg-blue-50 transition border-2 hover:border-blue-200">
+                    <input type="checkbox" name="full_time_position" value="1" class="w-5 h-5 mb-2 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                    <span class="text-[10px] font-black text-slate-500 uppercase text-center">Full-Time</span>
+                </label>
+                <label class="flex flex-col items-center p-4 bg-slate-50 border border-slate-100 rounded-3xl cursor-pointer hover:bg-blue-50 transition border-2 hover:border-blue-200">
+                    <input type="checkbox" name="has_previous_rejection" value="1" class="w-5 h-5 mb-2 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                    <span class="text-[10px] font-black text-slate-500 uppercase text-center">Previous Rejection</span>
+                </label>
+            </div>
+        </section>
+
+        <div id="hidden-inputs">
+            <input type="hidden" name="education_of_employee_High School" class="edu" value="0">
+            <input type="hidden" name="education_of_employee_Master" class="edu" value="0">
+            <input type="hidden" name="education_of_employee_Doctorate" class="edu" value="0">
+            <input type="hidden" name="continent_Asia" class="cont" value="0">
+            <input type="hidden" name="continent_Europe" class="cont" value="0">
+            <input type="hidden" name="continent_North America" class="cont" value="0">
+            <input type="hidden" name="continent_Oceania" class="cont" value="0">
+            <input type="hidden" name="continent_South America" class="cont" value="0">
+            <input type="hidden" name="region_of_employment_Midwest" class="reg" value="0">
+            <input type="hidden" name="region_of_employment_Northeast" class="reg" value="0">
+            <input type="hidden" name="region_of_employment_South" class="reg" value="0">
+            <input type="hidden" name="region_of_employment_West" class="reg" value="0">
+            <input type="hidden" name="visa_H-1B" class="visa" value="0">
+            <input type="hidden" name="visa_L-1" class="visa" value="0">
+            <input type="hidden" name="visa_O-1" class="visa" value="0">
+            <input type="hidden" name="visa_TN" class="visa" value="0">
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 text-white py-6 rounded-[2rem] font-black text-xl hover:bg-blue-700 shadow-2xl shadow-blue-200 transition-all hover:-translate-y-1 flex items-center justify-center gap-3">
+            <span>Analyze My Profile</span>
+            <i class="fas fa-bolt"></i>
+        </button>
+    </form>
+
+    <p class="text-center text-slate-400 text-xs mt-12">
+        © 2026 VisaPredictor. All predictions are based on statistical probability and machine learning.
+    </p>
+</main>
+
+<script>
+    function updateValue(groupClass, selectedName) {
+        document.querySelectorAll('.' + groupClass).forEach(input => {
+            input.value = "0";
+        });
+        if (selectedName !== "baseline") {
+            const target = document.getElementsByName(selectedName)[0];
+            if (target) target.value = "1";
+        }
+    }
+</script>
+
+ 
+-->
+
+{% extends "base.html" %}
+
+{% block content %}
+<main class="max-w-4xl mx-auto py-12 px-4 mt-8 dark:bg-slate-950 transition-colors duration-300">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">Visa Approval Predictor</h1>
+        <p class="text-slate-500 dark:text-slate-400 text-lg">Enter your details below to generate a real-time AI processing and status analysis.</p>
+    </div>
+
+    <form action="/predict" method="POST" class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] shadow-2xl border border-white/50 dark:border-slate-800 space-y-12">
+        
+        <section>
+            <div class="flex items-center gap-3 mb-8 text-blue-600 dark:text-blue-400 font-bold text-lg">
+                <span class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-xl">📋</span> Application Details
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Application Month (1-12)</label>
+                    <input type="number" name="application_month" min="1" max="12" required placeholder="e.g. 5" 
+                           class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Annual Wage ($)</label>
+                    <input type="number" name="annual_wage" step="0.01" required placeholder="e.g. 85000" 
+                           class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Number of Employees</label>
+                    <input type="number" name="no_of_employees" required placeholder="e.g. 250" 
+                           class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Company Age (Years)</label>
+                    <input type="number" name="company_age" required placeholder="e.g. 15" 
+                           class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white">
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-slate-100 dark:border-slate-800">
+
+        <section>
+            <div class="flex items-center gap-3 mb-8 text-blue-600 dark:text-blue-400 font-bold text-lg">
+                <span class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-xl">👤</span> Professional Profile
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Education Level</label>
+                    <select onchange="updateValue('edu', this.value)" required class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none appearance-none dark:text-white">
+                        <option value="baseline">Bachelor (Baseline)</option>
+                        <option value="education_of_employee_High School">High School</option>
+                        <option value="education_of_employee_Master">Master's</option>
+                        <option value="education_of_employee_Doctorate">Doctorate</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Continent of Origin</label>
+                    <select onchange="updateValue('cont', this.value)" required class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white">
+                        <option value="baseline">Africa (Baseline)</option>
+                        <option value="continent_Asia">Asia</option>
+                        <option value="continent_Europe">Europe</option>
+                        <option value="continent_North America">North America</option>
+                        <option value="continent_Oceania">Oceania</option>
+                        <option value="continent_South America">South America</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Region of Employment</label>
+                    <select onchange="updateValue('reg', this.value)" required class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white">
+                        <option value="baseline">Island (Baseline)</option>
+                        <option value="region_of_employment_Midwest">Midwest</option>
+                        <option value="region_of_employment_Northeast">Northeast</option>
+                        <option value="region_of_employment_South">South</option>
+                        <option value="region_of_employment_West">West</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Visa Category</label>
+                    <select onchange="updateValue('visa', this.value)" name="visa_category" required class="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white">
+                        <option value="baseline">E-2 (Baseline)</option>
+                        <option value="visa_H-1B">H-1B</option>
+                        <option value="visa_L-1">L-1</option>
+                        <option value="visa_O-1">O-1</option>
+                        <option value="visa_TN">TN</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-slate-100 dark:border-slate-800">
+
+        <section>
+            <div class="flex items-center gap-3 mb-8 text-blue-600 dark:text-blue-400 font-bold text-lg">
+                <span class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-xl">🚩</span> Additional Flags
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <label class="flex flex-col items-center p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 transition border-2 hover:border-blue-200 dark:hover:border-blue-500">
+                    <input type="checkbox" name="has_job_experience" value="1" class="w-5 h-5 mb-2 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500">
+                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase text-center">Has Experience</span>
+                </label>
+                <label class="flex flex-col items-center p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 transition border-2 hover:border-blue-200 dark:hover:border-blue-500">
+                    <input type="checkbox" name="requires_job_training" value="1" class="w-5 h-5 mb-2 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500">
+                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase text-center">Needs Training</span>
+                </label>
+                <label class="flex flex-col items-center p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 transition border-2 hover:border-blue-200 dark:hover:border-blue-500">
+                    <input type="checkbox" name="full_time_position" value="1" class="w-5 h-5 mb-2 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500">
+                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase text-center">Full-Time</span>
+                </label>
+                <label class="flex flex-col items-center p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 transition border-2 hover:border-blue-200 dark:hover:border-blue-500">
+                    <input type="checkbox" name="has_previous_rejection" value="1" class="w-5 h-5 mb-2 rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500">
+                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase text-center">Previous Rejection</span>
+                </label>
+            </div>
+        </section>
+
+        <div id="hidden-inputs">
+            <input type="hidden" name="education_of_employee_High School" class="edu" value="0">
+            <input type="hidden" name="education_of_employee_Master" class="edu" value="0">
+            <input type="hidden" name="education_of_employee_Doctorate" class="edu" value="0">
+            <input type="hidden" name="continent_Asia" class="cont" value="0">
+            <input type="hidden" name="continent_Europe" class="cont" value="0">
+            <input type="hidden" name="continent_North America" class="cont" value="0">
+            <input type="hidden" name="continent_Oceania" class="cont" value="0">
+            <input type="hidden" name="continent_South America" class="cont" value="0">
+            <input type="hidden" name="region_of_employment_Midwest" class="reg" value="0">
+            <input type="hidden" name="region_of_employment_Northeast" class="reg" value="0">
+            <input type="hidden" name="region_of_employment_South" class="reg" value="0">
+            <input type="hidden" name="region_of_employment_West" class="reg" value="0">
+            <input type="hidden" name="visa_H-1B" class="visa" value="0">
+            <input type="hidden" name="visa_L-1" class="visa" value="0">
+            <input type="hidden" name="visa_O-1" class="visa" value="0">
+            <input type="hidden" name="visa_TN" class="visa" value="0">
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 text-white py-6 rounded-[2rem] font-black text-xl hover:bg-blue-700 shadow-2xl shadow-blue-200 dark:shadow-none transition-all hover:-translate-y-1 flex items-center justify-center gap-3">
+            <span>Analyze My Profile</span>
+            <i class="fas fa-bolt"></i>
+        </button>
+    </form>
+
+    <p class="text-center text-slate-400 dark:text-slate-500 text-xs mt-12">
+        © 2026 VisaPredictor. All predictions are based on statistical probability and machine learning.
+    </p>
+</main>
+
+<script>
+    function updateValue(groupClass, selectedName) {
+        document.querySelectorAll('.' + groupClass).forEach(input => {
+            input.value = "0";
+        });
+        if (selectedName !== "baseline") {
+            const target = document.getElementsByName(selectedName)[0];
+            if (target) target.value = "1";
+        }
+    }
+</script>
+{% endblock %}

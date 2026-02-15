@@ -1,0 +1,334 @@
+<!-- 
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="max-w-6xl mx-auto pt-12 px-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+        <div>
+            <div class="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                <i class="fas fa-shield-check"></i> AI Analysis Complete
+            </div>
+            <h1 class="text-4xl font-black text-slate-900 tracking-tight">VisaPredictor Report</h1>
+        </div>
+        
+        <button onclick="window.print()" class="bg-white border border-slate-200 text-slate-700 px-6 py-3 rounded-2xl font-bold hover:bg-slate-50 transition flex items-center gap-2 shadow-sm">
+            <i class="fas fa-file-pdf text-rose-500"></i> Download Report
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white/80 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-xl border border-white/50 relative overflow-hidden">
+            <p class="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-2">Likely Status</p>
+            <h2 class="text-4xl font-black {% if status == 'CERTIFIED' %}text-emerald-600{% else %}text-rose-600{% endif %}">
+                {{ status }}
+            </h2>
+            <div class="absolute -right-4 -bottom-4 opacity-5 text-slate-900">
+                <i class="fas fa-certificate fa-8x"></i>
+            </div>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-xl border border-white/50">
+            <p class="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-2">AI Confidence</p>
+            <div class="flex items-end gap-2 mb-4">
+                <span class="text-4xl font-black text-slate-800">{{ confidence }}%</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                <div class="bg-blue-600 h-full rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(37,99,235,0.3)]" style="width: {{ confidence }}%"></div>
+            </div>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-xl border border-white/50">
+            <p class="text-slate-400 font-black text-[10px] uppercase tracking-widest mb-2">Processing Time</p>
+            <h2 class="text-4xl font-black text-slate-800">{{ days }} Days</h2>
+            <p class="text-emerald-600 font-bold text-xs mt-1">Range: {{ time_range }} Days</p>
+            <p class="text-slate-400 text-[10px] mt-2 font-bold uppercase tracking-tighter">Est. Date: {{ est_date }}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
+            <div class="mb-8">
+                <h3 class="text-lg font-black text-slate-800 uppercase tracking-tight">Status Influence Factors</h3>
+                <p class="text-slate-400 text-xs">Features driving the approval outcome</p>
+            </div>
+            <div class="h-[350px]">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
+            <div class="mb-8">
+                <h3 class="text-lg font-black text-slate-800 uppercase tracking-tight">Time Variance Factors</h3>
+                <p class="text-slate-400 text-xs">Features impacting processing duration</p>
+            </div>
+            <div class="h-[350px]">
+                <canvas id="timeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-16 p-8 bg-blue-600 rounded-[2.5rem] text-center text-white shadow-2xl shadow-blue-200">
+        <h3 class="text-2xl font-black mb-4">Need a detailed legal review?</h3>
+        <p class="text-blue-100 mb-8 max-w-lg mx-auto">While our AI is 98% accurate based on historical data, we recommend consulting with a certified immigration attorney for complex cases.</p>
+        <button class="bg-white text-blue-600 px-10 py-4 rounded-2xl font-black hover:bg-blue-50 transition shadow-lg">
+            Find an Expert
+        </button>
+    </div>
+</div>
+
+<script>
+    const statusImp = {{ status_imp | safe }};
+    const timeImp = {{ time_imp | safe }};
+
+    function createChart(canvasId, rawData, color) {
+        const labels = rawData.map(d => d.feature);
+        const values = rawData.map(d => d.value * 100);
+
+        new Chart(document.getElementById(canvasId), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Impact %',
+                    data: values,
+                    backgroundColor: color + '20', // Light transparent background
+                    borderColor: color,
+                    borderWidth: 3,
+                    borderRadius: 12,
+                    barThickness: 20
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        titleFont: { size: 14, weight: 'bold' },
+                        padding: 12,
+                        cornerRadius: 12,
+                        callbacks: {
+                            label: (ctx) => ` Influence: ${ctx.parsed.x.toFixed(1)}%`
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        beginAtZero: true, 
+                        max: 100,
+                        grid: { display: false },
+                        ticks: { font: { weight: 'bold' }, color: '#94a3b8' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { weight: 'bold' }, color: '#475569' }
+                    }
+                }
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        createChart('statusChart', statusImp, '#2563eb');
+        createChart('timeChart', timeImp, '#7c3aed');
+    });
+</script>
+
+
+ -->
+
+
+{% extends "base.html" %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="max-w-6xl mx-auto pt-12 px-6 dark:bg-slate-950 transition-colors duration-300">
+    
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+        <div>
+            <div class="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                <i class="fas fa-shield-check"></i> AI Analysis Complete
+            </div>
+            <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">VisaPredictor Report</h1>
+        </div>
+        
+        <button onclick="window.print()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-6 py-3 rounded-2xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center gap-2 shadow-sm">
+            <i class="fas fa-file-pdf text-rose-500"></i> Download Report
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-xl border border-white/50 dark:border-slate-800 relative overflow-hidden">
+            <p class="text-slate-400 dark:text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">Likely Status</p>
+            <h2 class="text-4xl font-black {% if status == 'CERTIFIED' %}text-emerald-600 dark:text-emerald-400{% else %}text-rose-600 dark:text-rose-400{% endif %}">
+                {{ status }}
+            </h2>
+            <div class="absolute -right-4 -bottom-4 opacity-5 text-slate-900 dark:text-white">
+                <i class="fas fa-certificate fa-8x"></i>
+            </div>
+        </div>
+
+        <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-xl border border-white/50 dark:border-slate-800">
+            <p class="text-slate-400 dark:text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">AI Confidence</p>
+            <div class="flex items-end gap-2 mb-4">
+                <span class="text-4xl font-black text-slate-800 dark:text-white">{{ confidence }}%</span>
+            </div>
+            <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                <div class="bg-blue-600 h-full rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(37,99,235,0.3)]" style="width: {{ confidence }}%"></div>
+            </div>
+        </div>
+
+        <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-xl border border-white/50 dark:border-slate-800">
+            <p class="text-slate-400 dark:text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">Processing Time</p>
+            <h2 class="text-4xl font-black text-slate-800 dark:text-white">{{ days }} Days</h2>
+            <p class="text-emerald-600 dark:text-emerald-400 font-bold text-xs mt-1">Range: {{ time_range }} Days</p>
+            <p class="text-slate-400 dark:text-slate-500 text-[10px] mt-2 font-bold uppercase tracking-tighter">Est. Date: {{ est_date }}</p>
+        </div>
+    </div>
+
+    <div class="mb-10 group">
+        <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-[2.5rem] p-[1px] shadow-2xl shadow-blue-200 dark:shadow-none">
+            <div class="bg-white dark:bg-slate-900 rounded-[2.45rem] p-8 md:p-10 relative overflow-hidden">
+                <div class="absolute -right-8 -top-8 text-slate-100 dark:text-slate-800/50 transform rotate-12">
+                    <i class="fas fa-brain fa-10x"></i>
+                </div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg">
+                            <i class="fas fa-sparkles text-sm"></i>
+                        </div>
+                        <h3 class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-widest">Executive AI Summary
+                        </h3>
+                    </div>
+                
+                    <div id="ai-text-container"
+                        class="text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-medium whitespace-pre-line">
+                        {{ ai_analysis }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 transition-colors">
+            <div class="mb-8">
+                <h3 class="text-lg font-black text-slate-800 dark:text-white uppercase tracking-tight">Status Influence Factors</h3>
+                <p class="text-slate-400 dark:text-slate-500 text-xs">Features driving the approval outcome</p>
+            </div>
+            <div class="h-[350px]">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 transition-colors">
+            <div class="mb-8">
+                <h3 class="text-lg font-black text-slate-800 dark:text-white uppercase tracking-tight">Time Variance Factors</h3>
+                <p class="text-slate-400 dark:text-slate-500 text-xs">Features impacting processing duration</p>
+            </div>
+            <div class="h-[350px]">
+                <canvas id="timeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-16 p-8 bg-blue-600 rounded-[2.5rem] text-center text-white shadow-2xl shadow-blue-200 dark:shadow-none">
+        <h3 class="text-2xl font-black mb-4">Need a detailed legal review?</h3>
+        <p class="text-blue-100 mb-8 max-w-lg mx-auto">Above prediction is based on historical data, we recommend consulting with a certified immigration attorney for complex cases.</p>
+    </div>
+</div>
+
+<script>
+    const statusImp = {{ status_imp | safe }};
+    const timeImp = {{ time_imp | safe }};
+
+    function getThemeColors() {
+        const isDark = document.documentElement.classList.contains('dark');
+        return {
+            text: isDark ? '#94a3b8' : '#475569',
+            grid: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
+        };
+    }
+
+    function createChart(canvasId, rawData, color) {
+        const theme = getThemeColors();
+        const labels = rawData.map(d => d.feature);
+        const values = rawData.map(d => d.value * 100);
+
+        return new Chart(document.getElementById(canvasId), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Impact %',
+                    data: values,
+                    backgroundColor: color + '30',
+                    borderColor: color,
+                    borderWidth: 2,
+                    borderRadius: 10,
+                    barThickness: 18
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        padding: 12,
+                        cornerRadius: 12,
+                    }
+                },
+                scales: {
+                    x: { 
+                        beginAtZero: true, 
+                        max: 100,
+                        grid: { color: theme.grid },
+                        ticks: { color: theme.text, font: { weight: 'bold' } }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: theme.text, font: { weight: 'bold' } }
+                    }
+                }
+            }
+        });
+    }
+
+    let statusChart, timeChart;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        statusChart = createChart('statusChart', statusImp, '#3b82f6');
+        timeChart = createChart('timeChart', timeImp, '#8b5cf6');
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('ai-text-container');
+        if (container) {
+            let content = container.innerHTML;
+            // Regex to find **text** and replace with <b>text</b>
+            content = content.replace(/\*\*(.*?)\*\*/g, '<b class="text-slate-900 dark:text-white font-black">$1</b>');
+            container.innerHTML = content;
+        }
+    });
+
+    const observer = new MutationObserver(() => {
+        const theme = getThemeColors();
+        [statusChart, timeChart].forEach(chart => {
+            if(chart) {
+                chart.options.scales.x.ticks.color = theme.text;
+                chart.options.scales.y.ticks.color = theme.text;
+                chart.options.scales.x.grid.color = theme.grid;
+                chart.update();
+            }
+        });
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+</script>
+{% endblock %}
