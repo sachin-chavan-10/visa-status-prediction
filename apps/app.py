@@ -546,12 +546,30 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a-very-secret-dev-key')
 
 # --- Gemini Configuration ---
 # genai.configure(api_key="AIzaSyDAy99EYuZqSa6IsRL_YkSLYtGTWGHBiGE")
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+
 gemini_model = genai.GenerativeModel('gemini-2.5-flash')
+
+# # --- Database Setup ---
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'visa_records.db')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db = SQLAlchemy(app)
 
 # --- Database Setup ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'visa_records.db')
+
+# 1. Look for the 'DATABASE_URL' environment variable (which Render provides)
+# 2. If it's not found, fall back to your local SQLite file
+database_url = os.environ.get('DATABASE_URL')
+
+if database_url:
+    # IMPORTANT: Render provides 'postgres://', but SQLAlchemy requires 'postgresql://'
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql://", 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'visa_records.db')
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -606,6 +624,9 @@ time_model = joblib.load(os.path.join(MODELS_PATH, 'pt_model.pkl'))
 STATUS_FEATURES = ['education_of_employee_High School', 'education_of_employee_Master', 'education_of_employee_Doctorate', 'has_job_experience', 'requires_job_training', 'no_of_employees', 'full_time_position', 'company_age', 'annual_wage', 'continent_Asia', 'continent_Europe', 'continent_North America', 'continent_Oceania', 'continent_South America', 'region_of_employment_South', 'region_of_employment_West']
 TIME_FEATURES = ['has_previous_rejection', 'visa_O-1', 'application_month', 'annual_wage', 'visa_H-1B', 'no_of_employees', 'visa_L-1', 'visa_TN']
 
+
+with app.app_context():
+    db.create_all()
 # --- ROUTES ---
 
 @app.route('/')
