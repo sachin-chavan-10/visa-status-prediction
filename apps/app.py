@@ -691,10 +691,19 @@ def predict():
     time_df = pd.DataFrame([[get_val(f) for f in TIME_FEATURES]], columns=TIME_FEATURES)
 
     # 2. Predictions
+    # status_pred = status_model.predict(status_df)[0]
+    # time_raw_pred = time_model.predict(time_df)[0]
+    # status_label = "CERTIFIED" if status_pred == 1 else "DENIED"
+    # confidence = round(np.max(status_model.predict_proba(status_df)[0]) * 100, 1) if hasattr(status_model, "predict_proba") else 92.5
+
+    # 2. Predictions (Add float() and int() wrapping)
     status_pred = status_model.predict(status_df)[0]
-    time_raw_pred = time_model.predict(time_df)[0]
+    time_raw_pred = float(time_model.predict(time_df)[0]) # Convert to float
     status_label = "CERTIFIED" if status_pred == 1 else "DENIED"
-    confidence = round(np.max(status_model.predict_proba(status_df)[0]) * 100, 1) if hasattr(status_model, "predict_proba") else 92.5
+
+    # Convert confidence to a plain Python float
+    raw_conf = np.max(status_model.predict_proba(status_df)[0]) if hasattr(status_model, "predict_proba") else 0.925
+    confidence = round(float(raw_conf) * 100, 1) # Force float() here
 
     # 3. Importance logic
     user_status_imp = []
@@ -770,9 +779,27 @@ def predict():
     for v in ['H-1B', 'L-1', 'O-1', 'TN']:
         if get_val(f'visa_{v}') == 1: visa_val = v
 
+    # new_record = VisaApplication(
+    #     user_id=current_user.id if current_user.is_authenticated else None,
+    #     annual_wage=get_val('annual_wage'),
+    #     visa_type=visa_val,
+    #     education=edu_val,
+    #     continent=cont_val,
+    #     region=reg_val,
+    #     no_of_employees=int(get_val('no_of_employees')),
+    #     company_age=int(get_val('company_age')),
+    #     has_experience="Yes" if get_val('has_job_experience') == 1 else "No",
+    #     requires_training="Yes" if get_val('requires_job_training') == 1 else "No",
+    #     is_full_time="Yes" if get_val('full_time_position') == 1 else "No",
+    #     prev_rejection="Yes" if get_val('has_previous_rejection') == 1 else "No",
+    #     status_prediction=status_label,
+    #     time_prediction=int(time_raw_pred),
+    #     confidence=confidence
+    # )
+
     new_record = VisaApplication(
         user_id=current_user.id if current_user.is_authenticated else None,
-        annual_wage=get_val('annual_wage'),
+        annual_wage=float(get_val('annual_wage')),
         visa_type=visa_val,
         education=edu_val,
         continent=cont_val,
@@ -784,8 +811,8 @@ def predict():
         is_full_time="Yes" if get_val('full_time_position') == 1 else "No",
         prev_rejection="Yes" if get_val('has_previous_rejection') == 1 else "No",
         status_prediction=status_label,
-        time_prediction=int(time_raw_pred),
-        confidence=confidence
+        time_prediction=int(time_raw_pred), # Ensure int()
+        confidence=float(confidence)        # Ensure float()
     )
 
     db.session.add(new_record)
