@@ -97,6 +97,8 @@ Predicted the duration of the visa application process based on engineered featu
 - Developed and Deployed a full-stack Flask application that uses the models which were trained in previous milestones
 
 + Deployment URL
+* Deployment URL
+ 
 https://visa-predictor-lr2y.onrender.com
 
 ## Key Features 
