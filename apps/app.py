@@ -124,6 +124,9 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('assessment'))
+    
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -150,6 +153,45 @@ def assessment():
 def history():
     user_apps = VisaApplication.query.filter_by(user_id=current_user.id).order_by(VisaApplication.timestamp.desc()).all()
     return render_template('history.html', history=user_apps)
+
+@app.route('/get_ai_insight', methods=['POST'])
+@login_required
+def get_ai_insight():
+    try:
+        # Get data from the JavaScript Fetch request
+        data = request.get_json()
+        if not data:
+            return {"insight": "No data received"}, 400
+
+        prompt = f"""
+        Act as a Senior US Immigration Analyst. 
+        Case Details:
+        - Prediction: {data.get('status')}
+        - Confidence: {data.get('confidence')}%
+        - Processing Time: {data.get('days')} days
+        - Visa Type: {data.get('visa_type')}
+
+        Factors:
+        1. Approval Drivers: {data.get('status_summary')}
+        2. Delay Drivers: {data.get('time_summary')}
+
+        Provide a 3-paragraph Strategic Analysis. 
+        Para 1: Why they were {data.get('status')}.
+        Para 2: Impact of {data.get('top_feat')} on time.
+        Para 3: One specific Pro-Tip.
+        Keep it professional. No bullet points.
+        """
+        
+        response = gemini_model.generate_content(prompt)
+        
+        if response and response.text:
+            return {"insight": response.text.strip()}
+        else:
+            return {"insight": "AI returned an empty response."}, 500
+
+    except Exception as e:
+        print(f"AI ERROR: {str(e)}") # This will show up in your terminal
+        return {"insight": f"Server Error: {str(e)}"}, 500
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -196,37 +238,42 @@ def predict():
     for d in user_time_imp: d['value'] = d['impact'] / t_total
     user_time_imp = sorted(user_time_imp, key=lambda x: x['value'], reverse=True)[:10]
 
-    # 4. AI Insight
-    ai_analysis = "Analysis not available."
-    try:
-        status_chart_summary = ", ".join([f"{d['feature']} ({round(d['value']*100)}% impact)" for d in user_status_imp])
+    # # 4. AI Insight
+    # ai_analysis = "Analysis not available."
+    # try:
+    #     status_chart_summary = ", ".join([f"{d['feature']} ({round(d['value']*100)}% impact)" for d in user_status_imp])
 
-        time_chart_summary = ", ".join([f"{d['feature']} ({round(d['value']*100)}% impact)" for d in user_time_imp])
+    #     time_chart_summary = ", ".join([f"{d['feature']} ({round(d['value']*100)}% impact)" for d in user_time_imp])
         
-        prompt = f"""
-        Act as a Senior US Immigration Analyst. 
-        I have a visa prediction with the following data:
-        - Result: {status_label}
-        - Confidence: {confidence}%
-        - Processing Time: {int(time_raw_pred)} days
-        - Visa Type: {data.get('visa_category', 'Specified')}
+    #     prompt = f"""
+    #     Act as a Senior US Immigration Analyst. 
+    #     I have a visa prediction with the following data:
+    #     - Result: {status_label}
+    #     - Confidence: {confidence}%
+    #     - Processing Time: {int(time_raw_pred)} days
+    #     - Visa Type: {data.get('visa_category', 'Specified')}
 
-        ML Model Insights:
-        1. Factors affecting APPROVAL: {status_chart_summary}
-        2. Factors affecting TIME DELAYS: {time_chart_summary}
+    #     ML Model Insights:
+    #     1. Factors affecting APPROVAL: {status_chart_summary}
+    #     2. Factors affecting TIME DELAYS: {time_chart_summary}
 
-        Provide a 3-short paragraph 'Strategic Analysis':
-        Paragraph 1: Explain why they were {status_label} based on the approval factors.
+    #     Provide a 3-short paragraph 'Strategic Analysis':
+    #     Paragraph 1: Explain why they were {status_label} based on the approval factors.
 
-        Paragraph 2: Analyze the TIME SENSITIVITY. Specifically explain why {user_time_imp[0]['feature']} is impacting their wait time.
+    #     Paragraph 2: Analyze the TIME SENSITIVITY. Specifically explain why {user_time_imp[0]['feature']} is impacting their wait time.
         
-        Paragraph 3: Give a specific 'Pro-Tip' to optimize their application.
+    #     Paragraph 3: Give a specific 'Pro-Tip' to optimize their application.
         
-        Keep the tone professional and expert. Do not use bullet points.
-        """
-        response = gemini_model.generate_content(prompt)
-        ai_analysis = response.text.strip()
-    except: pass
+    #     Keep the tone professional and expert. Do not use bullet points.
+    #     """
+    #     response = gemini_model.generate_content(prompt)
+    #     ai_analysis = response.text.strip()
+    # except: pass
+
+    status_summary = ", ".join([f"{d['feature']} ({round(d['value']*100)}% impact)" for d in user_status_imp])
+    time_summary = ", ".join([f"{d['feature']} ({round(d['value']*100)}% impact)" for d in user_time_imp])
+    top_time_feat = user_time_imp[0]['feature'] if user_time_imp else "General factors"
+
 
     # --- UPDATED DATABASE LOGIC START ---
     
@@ -271,11 +318,25 @@ def predict():
     
     # --- UPDATED DATABASE LOGIC END ---
 
-    return render_template('result.html', status=status_label, confidence=confidence, days=int(time_raw_pred), 
-                           time_range=f"{int(time_raw_pred)-2}-{int(time_raw_pred)+2}", 
-                           status_imp=json.dumps(user_status_imp), time_imp=json.dumps(user_time_imp),
-                           ai_analysis=ai_analysis, est_date=(datetime.now() + timedelta(days=int(time_raw_pred))).strftime('%b %d, %Y'))
+#     return render_template('result.html', status=status_label, confidence=confidence, days=int(time_raw_pred), 
+#                            time_range=f"{int(time_raw_pred)-2}-{int(time_raw_pred)+2}", 
+#                            status_imp=json.dumps(user_status_imp), time_imp=json.dumps(user_time_imp),
+#                            ai_analysis=ai_analysis, est_date=(datetime.now() + timedelta(days=int(time_raw_pred))).strftime('%b %d, %Y'))
 
+    return render_template('result.html', 
+                           status=status_label, 
+                           confidence=confidence, 
+                           days=int(time_raw_pred), 
+                           visa_val=visa_val,
+                           status_imp_text=status_summary, 
+                           time_imp_text=time_summary,     
+                           top_feat=top_time_feat,         
+                           time_range=f"{int(time_raw_pred)-2}-{int(time_raw_pred)+2}", 
+                           status_imp=json.dumps(user_status_imp), 
+                           time_imp=json.dumps(user_time_imp),
+                           est_date=(datetime.now() + timedelta(days=int(time_raw_pred))).strftime('%b %d, %Y'))
 if __name__ == '__main__':
     with app.app_context(): db.create_all()
     app.run(debug=True, port=5000)
+
+
