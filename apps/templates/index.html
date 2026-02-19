@@ -25,13 +25,6 @@
                 Our models are trained on global historical records for maximum accuracy.
             </p>
             
-            <!-- <div class="flex flex-wrap gap-4">
-                <a href="/login"
-                    class="bg-blue-600 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl shadow-blue-200 dark:shadow-none hover:scale-105 transition transform active:scale-95 flex items-center gap-3">
-                    <span>Get Started</span>
-                    <i class="fas fa-arrow-right text-sm"></i>
-                </a>
-            </div> -->
 
             <div class="flex flex-wrap gap-4">
                 {% if current_user.is_authenticated %}
@@ -41,7 +34,7 @@
                     <i class="fas fa-clipboard-check text-sm"></i>
                 </a>
                 {% else %}
-                <a href="{{ url_for('login') }}"
+                <a href="{{ url_for('signup') }}"
                     class="bg-blue-600 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-2xl shadow-blue-200 dark:shadow-none hover:scale-105 transition transform active:scale-95 flex items-center gap-3">
                     <span>Get Started</span>
                     <i class="fas fa-arrow-right text-sm"></i>
